@@ -6,7 +6,7 @@
 ### install
 ```
 git clone git@github.com:ProtsenkoAI/vezdecode-30-40-50-webvec.git
-cd vezdecode-30-40-50-webvec/
+cd vezdecode-30-40/
 pipenv install
 pipenv shell
 ```
