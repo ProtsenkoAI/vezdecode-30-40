@@ -13,6 +13,17 @@ def iou(lst1, lst2):
     return intersected / (len(lst1) + len(lst2) - intersected)
 
 
+def component_types_mismatch(repr1, repr2):
+    categ2cnt = defaultdict(int)
+
+    for elem in repr1:
+        categ2cnt[elem.category] += 1
+    for elem in repr2:
+        categ2cnt[elem.category] -= 1
+
+    return sum([abs(val) for val in categ2cnt.values()]) / (len(repr1) + len(repr2))
+
+
 def get_hrefs(elems: List[Elem]):
     hrefs = []
     for elem in elems:
@@ -33,9 +44,6 @@ def intersection_inversions_index(repr1: List[Elem], repr2: List[Elem]):
         if elem in repr2:
             inter_idxs1.append(idx1)
             inter_idxs2.append(repr2.index(elem))
-
-    #     print(inter_idxs1, inter_idxs2)
-    # cnt inversions
     nb_invs = 0
     nb_pairs = 0
     for idx, position in enumerate(inter_idxs1):
@@ -50,17 +58,6 @@ def intersection_inversions_index(repr1: List[Elem], repr2: List[Elem]):
     return nb_invs / nb_pairs
 
 
-def component_types_mismatch(repr1, repr2):
-    categ2cnt = defaultdict(int)
-
-    for elem in repr1:
-        categ2cnt[elem.category] += 1
-    for elem in repr2:
-        categ2cnt[elem.category] -= 1
-
-    return sum([abs(val) for val in categ2cnt.values()]) / (len(repr1) + len(repr2))
-
-
 def words_similarity(repr1, repr2):
     texts1 = []
     for elem in repr1:
@@ -70,12 +67,10 @@ def words_similarity(repr1, repr2):
     for elem in repr2:
         if elem.category == "text":
             texts2.append(elem.text)
-
     cnter1 = Counter(" ".join(texts1).split())
     cnter2 = Counter(" ".join(texts2).split())
     sum1 = sum(cnter1.values())
     sum2 = sum(cnter2.values())
-
     # normalization
     for key, value in cnter1.items():
         cnter1[key] = value / sum1
